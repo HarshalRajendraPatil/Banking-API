@@ -1,7 +1,11 @@
+// Requiring all the important files and packages.
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 
+//------------------------------------------------------------------------------------------//
+
+// Defining the schema for users
 const newUserSchmea = new mongoose.Schema({
   email: {
     type: String,
@@ -27,6 +31,9 @@ const newUserSchmea = new mongoose.Schema({
   },
 });
 
+//------------------------------------------------------------------------------------------//
+
+// Using middleware and static methods on schema
 newUserSchmea.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 12);
   this.confirmPassword = undefined;
@@ -39,6 +46,12 @@ newUserSchmea.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+//------------------------------------------------------------------------------------------//
+
+// Creating new user model
 const newUser = mongoose.model("newUser", newUserSchmea);
 
+//------------------------------------------------------------------------------------------//
+
+// Exporting the model
 module.exports = newUser;

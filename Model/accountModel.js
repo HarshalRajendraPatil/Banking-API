@@ -1,5 +1,9 @@
+// Requiring the important files and packages
 const mongoose = require("mongoose");
 
+//------------------------------------------------------------------------------------------//
+
+// Defining the account schema
 const accountSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -37,12 +41,22 @@ const accountSchema = new mongoose.Schema({
   pin: Number,
 });
 
-accountSchema.pre("save", function () {
+//------------------------------------------------------------------------------------------//
+
+// Using middleware to set account number and pin
+accountSchema.pre("save", function (next) {
   this.accountNumber =
     this.contactNumber * 100 + Math.trunc(Math.random() * 100) + 1;
   this.pin = this.DOB.getFullYear();
+  next();
 });
 
+//------------------------------------------------------------------------------------------//
+
+// Creating accounts model
 const Account = mongoose.model("Account", accountSchema);
 
+//------------------------------------------------------------------------------------------//
+
+// Exporting the account model
 module.exports = Account;
