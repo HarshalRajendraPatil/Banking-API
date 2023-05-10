@@ -3,6 +3,7 @@ const express = require("express");
 const userController = require("./../Controller/newUserController");
 const accountController = require("./../Controller/accountController");
 const authController = require("./../Controller/authController");
+const transactionController = require("./../Controller/transactionController");
 const router = express.Router();
 
 //------------------------------------------------------------------------------------------//
@@ -45,6 +46,20 @@ router
 
 // Route for taking loans
 router.route("/:id/loan").post(authController.protect, accountController.loan);
+
+//------------------------------------------------------------------------------------------//
+
+// Route for transferring the money to other accounts
+router
+  .route("/:accNum/transferFunds")
+  .post(authController.protect, transactionController.transferMoney);
+
+//------------------------------------------------------------------------------------------//
+
+// Route for getting the transaction history of the user account
+router
+  .route("/:accNum/transactionHistory")
+  .get(authController.protect, transactionController.transactionHistory);
 
 //------------------------------------------------------------------------------------------//
 
